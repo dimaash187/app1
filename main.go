@@ -55,6 +55,12 @@ func FactorialHandler(w http.ResponseWriter, r *http.Request) {
 
 	result := Factorial(n)
 
+	json.NewEncoder(w).Encode(result)
+}
+
+func HitHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	// LETS MAKE SURE TO INCREMENT HIT COUTNER ONLY AFTER RUNNING FACTORIAL
 	// IN CASE WE FAIL ANYWHERE BEFORE
 	// THIS WAY WE ONLY COUNT SUCCESSFULL CALLS
@@ -62,7 +68,7 @@ func FactorialHandler(w http.ResponseWriter, r *http.Request) {
 	info.HitCount++
 	mu.Unlock()
 
-	json.NewEncoder(w).Encode(result)
+	json.NewEncoder(w).Encode("OK")
 }
 
 func InfoHandler(w http.ResponseWriter, r *http.Request) {
@@ -89,12 +95,13 @@ func main() {
 
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET"},
+		AllowedMethods: []string{"GET", "PUT"},
 	})
 	r := mux.NewRouter()
 
 	r.HandleFunc("/info", InfoHandler).Methods("GET")
 	r.HandleFunc("/factorial/{narg}", FactorialHandler).Methods("GET")
+	r.HandleFunc("/hit-counter", HitHandler).Methods("PUT")
 
 	log.Fatal(http.ListenAndServe(":8081", c.Handler(r)))
 

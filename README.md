@@ -1,10 +1,11 @@
 # GoLANG App1 BACKEND
 
 This project is a backend server to calculate factorial. Makefile provided. The project is run on the port 8081.
-It exposes 2 endpoints:
+It exposes 3 endpoints:
 
     1. /info [ GET request ]
     2. /factorial/{n} [ GET request with a numeric n argument ]
+    3. /hit-counter [ PUT request ], increments a server wide hit counter.
 
 ## Build
 
